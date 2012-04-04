@@ -1,0 +1,8 @@
+# TypoScript for the asynchronous inclusion method
+# NOTE: don't forget to use the matching template file
+page {
+	jsInline {
+		200 = USER
+		200.userFunc = tx_rsgoogleanalytics->processTrackingCode
+	}
+}

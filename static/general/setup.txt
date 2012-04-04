@@ -1,0 +1,93 @@
+plugin.tx_rsgoogleanalytics {
+	# File containing the JavaScript code template
+	templateFile = EXT:rsgoogleanalytics/res/templates/codeTraditional.js
+
+	# Whether traditional or asynchronous method should be used (set to 1 for asynchronous). Beware to be consistent with template file
+	asynchronous = 0
+
+	# Boolean, whether plugin is active or not
+	active = 1
+
+	# Your Google-Analytics Account, standard is Test-Account of RS WebSystems
+	account = UA-1628673-4
+
+	# Which Page Title should be tracked   Option title: Page title is set, Option rootline: Rootline of Titles ist set, blank: GA uses page-path, for
+	registerTitle= rootline
+
+	# Should Downloads be tracked by GA, or option !ALL, all file-downloads will be tracked
+	trackDownloads = 1
+	# Folders in which should be tracked only
+	trackDownloads.folderList = fileadmin/,uploads/
+	# restrict tracking to filetypes
+	trackDownloads.fileTypes = pdf,doc
+
+	# track External links, another possibility is !ALL tracks all external Urls
+	trackExternals = 1
+	# restrict tracking to this domains
+	trackExternals.domainList = amazon.com,typo3.org
+
+	# If you have multiple Domains for this site enable
+	multipleDomains = 0
+	multipleDomain.domainNames =
+
+	# Only Works if multipleDomains is false
+	trackSubDomains = 0
+	# domainName (not www.example.com)!!!
+	trackSubDomains.domainName = example.com
+
+	# Keywords and Referers which are treated as direct access
+	searchEngines {
+		redirectKeywords = my name, my domain, city and company name
+		redirectReferrer = example.net,domain2-redirected.de,my-web-agency.de
+	}
+
+
+
+	customVars {
+		1{
+			name = gender
+			scope = 1
+			data = TSFE:fe_user|user|gender
+		}
+		2 {
+			name = name
+			scope = 1
+			data = TSFE:fe_user|user|name
+		}
+	}
+
+	visitorSegment.data = TSFE:fe_user|user|name
+
+		// currently not implented
+	campaignTracking {
+		allowAnchor = false
+		track = true
+		nameKey =
+		contentKey =
+		mediumKey =
+		NOKey =
+		sourceKey =
+		termKey =
+
+		referrerOveride =
+		cookieTimeout = default
+	}
+
+	eCommerce {
+		enableTracking = true
+	}
+
+	# Disable logging different client-data
+	disableDataTracking {
+		# if enabled no logging browser of Browser information
+		browserInfo = 0
+		# if enebaled, GA will not try to detect users flash version
+		flashTest = 0
+		# if enabled, page title will not be Saved
+		pageTitle = 0
+		# anonymize the IP-address (needed for german law)
+		anonymizeIp = 1
+	}
+
+
+}

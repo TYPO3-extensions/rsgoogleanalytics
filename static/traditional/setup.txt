@@ -1,0 +1,17 @@
+# TypoScript for the tradition inclusion method
+page {
+	jsFooterInline {
+		200 = USER
+		200.userFunc = tx_rsgoogleanalytics->processTrackingCode
+	}
+
+	includeJSFooterlibs {
+
+		rsgoogleanalytics = http://www.google-analytics.com/ga.js
+		rsgoogleanalytics.external = 1
+	}
+}
+
+[globalString = _SERVER|HTTPS=on]
+	page.includeJSFooterlibs.rsgoogleanalytics = https://ssl.google-analytics.com/ga.js
+[global]

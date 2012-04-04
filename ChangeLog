@@ -1,0 +1,7 @@
+2012-04-04 Francois Suter  <typo3@cobweb.ch>
+
+	* Corrected the assembly of the page title, resolves #26654
+
+2008-02-22 Steffen Ritter  <info@steffen-ritter.net>
+
+	* Initial release
