@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<description>Language labels for RS Google Analytics</description>
+		<type>module</type>
+		<csh_table></csh_table>
+		<fileId>EXT:rsgoogleanalytics/locallang.xml</fileId>
+		<labelContext type="array">
+		</labelContext>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="config.active">Active: Check this box to activate tracking with Google Analytics</label>
+			<label index="config.asynchronous">Asynchronous inclusion: Check this box to activate asynchronous inclusion of GA code (instead of traditional method)</label>
+			<label index="config.account">Google Analytics account: Enter your account number (UA-XXXXXXX-X)</label>
+			<label index="config.templateFile">Template file: Path to the JS file template</label>
+		</languageKey>
+	</data>
+</T3locallang>

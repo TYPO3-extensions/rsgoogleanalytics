@@ -1,18 +1,18 @@
 plugin.tx_rsgoogleanalytics {
 	# File containing the JavaScript code template
-	templateFile = EXT:rsgoogleanalytics/res/templates/codeTraditional.js
+	templateFile = {$plugin.tx_rsgoogleanalytics.templateFile}
 
 	# Whether traditional or asynchronous method should be used (set to 1 for asynchronous). Beware to be consistent with template file
-	asynchronous = 0
+	asynchronous = {$plugin.tx_rsgoogleanalytics.asynchronous}
 
 	# Boolean, whether plugin is active or not
-	active = 1
+	active = {$plugin.tx_rsgoogleanalytics.active}
 
 	# Your Google-Analytics Account, standard is Test-Account of RS WebSystems
-	account = UA-1628673-4
+	account = {$plugin.tx_rsgoogleanalytics.account}
 
 	# Which Page Title should be tracked   Option title: Page title is set, Option rootline: Rootline of Titles ist set, blank: GA uses page-path, for
-	registerTitle= rootline
+	registerTitle = rootline
 
 	# Should Downloads be tracked by GA, or option !ALL, all file-downloads will be tracked
 	trackDownloads = 1
@@ -26,9 +26,9 @@ plugin.tx_rsgoogleanalytics {
 	# restrict tracking to this domains
 	trackExternals.domainList = amazon.com,typo3.org
 
-	# If you have multiple Domains for this site enable
+	# If you have multiple Domains for this site enable and add comma-separated list of domain names
 	multipleDomains = 0
-	multipleDomain.domainNames =
+	multipleDomains.domainNames =
 
 	# Only Works if multipleDomains is false
 	trackSubDomains = 0
@@ -40,8 +40,6 @@ plugin.tx_rsgoogleanalytics {
 		redirectKeywords = my name, my domain, city and company name
 		redirectReferrer = example.net,domain2-redirected.de,my-web-agency.de
 	}
-
-
 
 	customVars {
 		1{

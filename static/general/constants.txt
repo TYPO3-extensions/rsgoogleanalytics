@@ -1,0 +1,13 @@
+plugin.tx_rsgoogleanalytics {
+	# cat=plugin.tx_rsgoogleanalytics/enable/a; type=boolean; label=LLL:EXT:rsgoogleanalytics/locallang.xml:config.active
+	active = 1
+
+	# cat=plugin.tx_rsgoogleanalytics/enable/b; type=boolean; label=LLL:EXT:rsgoogleanalytics/locallang.xml:config.asynchronous
+	asynchronous = 1
+
+	# cat=plugin.tx_rsgoogleanalytics/enable/c; type=string; label=LLL:EXT:rsgoogleanalytics/locallang.xml:config.account
+	account = UA-1628673-4
+
+	# cat=plugin.tx_rsgoogleanalytics/file/; type=file[html,htm,tmpl,js]; label=LLL:EXT:rsgoogleanalytics/locallang.xml:config.templateFile
+	templateFile = EXT:rsgoogleanalytics/res/templates/codeAsynchronous.js
+}
