@@ -380,7 +380,7 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 				if ( /*checkInMultiple($url)*/
 					0) {
 					$function = $this->buildCommand('link', array($url)) . 'return false;';
-				} elseif ($this->modConfig['trackExternals'] && ($this->checkURL($url) || $this->modConfig['trackExternals'] == '!ALL')) {
+				} elseif ($this->modConfig['trackExternals'] && ($this->modConfig['trackExternals'] == '!ALL') || $this->checkURL($url)) {
 					$function = $this->buildCommand('trackEvent', array('Leaving Site', 'External URL', $url));
 				}
 				break;
@@ -390,7 +390,7 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 					$fileInfo = pathinfo($fileName);
 					// TODO: provide hook where downloader extension can register their transformation function
 
-					if ($this->checkFile($fileName) || $this->modConfig['trackDownloads'] == '!ALL') {
+					if ($this->modConfig['trackDownloads'] == '!ALL' || $this->checkFile($fileName)) {
 						$function = $this->buildCommand('trackEvent', array('Download', $fileInfo['extension'], $fileName));
 					}
 				}
