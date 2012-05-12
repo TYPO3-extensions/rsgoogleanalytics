@@ -43,7 +43,7 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 	var $modConfig = array();
 
 	/**
-	@var array
+	 * @var array
 	 */
 	protected $commands = array();
 
