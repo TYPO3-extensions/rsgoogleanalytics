@@ -1,6 +1,16 @@
+2012-05-09 Francois Suter  <typo3@cobweb.ch>
+
+	* Added a manual, resolves #35663
+	* Improved performance of download and external link tracking check, resolves #36998
+	* Added TypoScript constants, resolves #36993
+
 2012-04-04 Francois Suter  <typo3@cobweb.ch>
 
+	* Added configurable template path, resolves #11384
+	* Added possibility to use asynchronous code, resolves #11385
 	* Corrected the assembly of the page title, resolves #26654
+	* Split static TS between general setup and page inclusion, resolves #30023
+	* Corrected gathering of file information for download tracking when using absolute URLs, resolves #30159
 
 2008-02-22 Steffen Ritter  <info@steffen-ritter.net>
 
