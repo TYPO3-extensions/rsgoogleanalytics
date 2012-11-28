@@ -2,6 +2,7 @@
 
 	* Removed usage of deprecated method setAllowHash, resolves #43390
 	* Changed usage of setAllowLinker to use boolean value, resolves #43391
+	* Corrected handling of anonymizeIp to use global gat object, resolves #39038
 
 2012-05-09 Francois Suter  <typo3@cobweb.ch>
 

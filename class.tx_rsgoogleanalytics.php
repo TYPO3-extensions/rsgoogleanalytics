@@ -257,12 +257,14 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 			$this->commands[502] = $this->buildCommand('setDetectTitle', array(FALSE));
 		}
 		if ($this->modConfig['disableDataTracking.']['anonymizeIp']) {
-			$this->commands[503] = $this->buildCommand('anonymizeIp', array());
+			$this->commands[503] = $this->buildGatCommand('anonymizeIp', array());
 		}
 	}
 
 	/**
 	 * Assembles a single tracker command
+	 *
+	 * If the command needs to be applied to the global gat object, use the buildGatCommand() method instead.
 	 *
 	 * @param string $command The name of the command
 	 * @param array $parameter The list of call parameters
@@ -276,6 +278,32 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 			// Generate asynchronous code
 		} else {
 			$command = "\t_gaq.push(['_" . $command . "'";
+			if (count($parameter) > 0) {
+				$command .= ', ' . implode(', ', $this->wrapJSParams($parameter));
+			}
+			$command .= ']);';
+		}
+		return $command;
+	}
+
+	/**
+	 * Assembles a single command for the gat object
+	 *
+	 * A few commands (mostly anonymizeIp) refer to the global gat object, rather than the page tracker.
+	 * This method handles these special needs.
+	 *
+	 * @param string $command The name of the command
+	 * @param array $parameter The list of call parameters
+	 * @return string The assembled JavaScript command
+	 */
+	protected function buildGatCommand($command, array $parameter) {
+			// Generate traditional code
+		if (empty($this->modConfig['asynchronous'])) {
+			$command = "\t" . '_gat._' . $command . '(' . implode(', ', $this->wrapJSParams($parameter)) . ');';
+
+			// Generate asynchronous code
+		} else {
+			$command = "\t_gaq.push(['_gat._" . $command . "'";
 			if (count($parameter) > 0) {
 				$command .= ', ' . implode(', ', $this->wrapJSParams($parameter));
 			}
