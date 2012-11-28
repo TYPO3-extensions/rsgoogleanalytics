@@ -143,10 +143,29 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 	 * @return void
 	 */
 	protected function makeDomainConfiguration() {
+			// If the domain configuration has already been handled, this array will not be empty
+			// With this check we avoid handling the configuration twice
 		if (count($this->domainConfig) == 0) {
 			if ($this->modConfig['multipleDomains'] && $this->modConfig['multipleDomains'] != 'false') {
-				$this->domainConfig['multiple'] = t3lib_div::trimExplode(',', $this->modConfig['multipleDomains.']['domainNames'], 1);
-				$this->commands[10] = $this->buildCommand('setDomainName', array('none'));
+					// Extract the list of domains
+				$this->domainConfig['multiple'] = t3lib_div::trimExplode(',', $this->modConfig['multipleDomains.']['domainNames'], TRUE);
+				$selectedDomain = 'none';
+				$numberOfDomains = count($this->domainConfig['multiple']);
+					// If there's only one, use it as is
+				if ($numberOfDomains == 1) {
+					$selectedDomain = $this->domainConfig['multiple'][0];
+
+					// If there are more than one, try to match to the current domain
+				} elseif ($numberOfDomains > 1) {
+					$currentDomain = t3lib_div::getIndpEnv('TYPO3_HOST_ONLY');
+					for ($i = 0; $i < $numberOfDomains; $i++) {
+						if (strstr($currentDomain, $this->domainConfig['multiple'][$i]) == $this->domainConfig['multiple'][$i]) {
+							$selectedDomain = $this->domainConfig['multiple'][$i];
+							break;
+						}
+					}
+				}
+				$this->commands[10] = $this->buildCommand('setDomainName', array($selectedDomain));
 				$this->commands[11] = $this->buildCommand('setAllowLinker', array(TRUE));
 
 			} elseif ($this->modConfig['trackSubDomains'] && $this->modConfig['trackSubDomains'] != 'false') {
@@ -193,7 +212,8 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 
 	/**
 	 * Generates Commands for e-commerce tracking
-	 * @return
+	 *
+	 * @return void
 	 */
 	protected function makeECommerceTracking() {
 		if (!$this->modConfig['eCommerce.']['enableTracking']) {
@@ -393,7 +413,10 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 	 * @return void
 	 */
 	function linkPostProcess(&$params, $reference) {
-		if (!$this->isActive()) return;
+		if (!$this->isActive()) {
+			return;
+		}
+			// Make sure the domain configuration has been handled
 		$this->makeDomainConfiguration();
 
 		$function = FALSE;
