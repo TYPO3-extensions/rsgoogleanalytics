@@ -148,11 +148,9 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 				$this->domainConfig['multiple'] = t3lib_div::trimExplode(',', $this->modConfig['multipleDomains.']['domainNames'], 1);
 				$this->commands[10] = $this->buildCommand('setDomainName', array('none'));
 				$this->commands[11] = $this->buildCommand('setAllowLinker', array('enable'));
-				$this->commands[12] = $this->buildCommand('setAllowHash', array(FALSE));
 
 			} elseif ($this->modConfig['trackSubDomains'] && $this->modConfig['trackSubDomains'] != 'false') {
 				$this->commands[10] = $this->buildCommand('setDomainName', array('.' . $this->modConfig['trackSubDomains.']['domainName']));
-				$this->commands[12] = $this->buildCommand('setAllowHash', array(FALSE));
 			}
 		}
 	}
