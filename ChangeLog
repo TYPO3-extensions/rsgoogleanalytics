@@ -1,6 +1,7 @@
 2012-11-28 Francois Suter  <typo3@cobweb.ch>
 
 	* Removed usage of deprecated method setAllowHash, resolves #43390
+	* Changed usage of setAllowLinker to use boolean value, resolves #43391
 
 2012-05-09 Francois Suter  <typo3@cobweb.ch>
 
