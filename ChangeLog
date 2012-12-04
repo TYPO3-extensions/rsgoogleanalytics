@@ -1,3 +1,7 @@
+2012-12-03 Francois Suter  <typo3@cobweb.ch>
+
+	* Added code for properly tracking cross-domain links, resolves #43568
+
 2012-11-28 Francois Suter  <typo3@cobweb.ch>
 
 	* Removed usage of deprecated method setAllowHash, resolves #43390

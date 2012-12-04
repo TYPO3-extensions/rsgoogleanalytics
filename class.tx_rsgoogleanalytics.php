@@ -53,6 +53,11 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 	protected $domainConfig = array();
 
 	/**
+	 * @var string
+	 */
+	protected $selectedDomain;
+
+	/**
 	 * @var array
 	 */
 	protected $eCommerce = array('items' => array(), 'transaction' => array());
@@ -149,23 +154,22 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 			if ($this->modConfig['multipleDomains'] && $this->modConfig['multipleDomains'] != 'false') {
 					// Extract the list of domains
 				$this->domainConfig['multiple'] = t3lib_div::trimExplode(',', $this->modConfig['multipleDomains.']['domainNames'], TRUE);
-				$selectedDomain = 'none';
 				$numberOfDomains = count($this->domainConfig['multiple']);
 					// If there's only one, use it as is
 				if ($numberOfDomains == 1) {
-					$selectedDomain = $this->domainConfig['multiple'][0];
+					$this->selectedDomain = $this->domainConfig['multiple'][0];
 
 					// If there are more than one, try to match to the current domain
 				} elseif ($numberOfDomains > 1) {
 					$currentDomain = t3lib_div::getIndpEnv('TYPO3_HOST_ONLY');
 					for ($i = 0; $i < $numberOfDomains; $i++) {
 						if (strstr($currentDomain, $this->domainConfig['multiple'][$i]) == $this->domainConfig['multiple'][$i]) {
-							$selectedDomain = $this->domainConfig['multiple'][$i];
+							$this->selectedDomain = $this->domainConfig['multiple'][$i];
 							break;
 						}
 					}
 				}
-				$this->commands[10] = $this->buildCommand('setDomainName', array($selectedDomain));
+				$this->commands[10] = $this->buildCommand('setDomainName', array((empty($this->selectedDomain)) ? 'none' : $this->selectedDomain));
 				$this->commands[11] = $this->buildCommand('setAllowLinker', array(TRUE));
 
 			} elseif ($this->modConfig['trackSubDomains'] && $this->modConfig['trackSubDomains'] != 'false') {
@@ -366,6 +370,26 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 	}
 
 	/**
+	 * Checks whether the given URL should be considered as being cross-domain
+	 *
+	 * @param string $url The URL to check
+	 * @return bool
+	 */
+	protected function isUrlCrossDomain($url) {
+		$urlParts = parse_url($url);
+			// Loop on all configured domains
+		$numberOfDomains = count($this->domainConfig['multiple']);
+		for ($i = 0; $i < $numberOfDomains; $i++) {
+			$currentDomain = $this->domainConfig['multiple'][$i];
+				// Stop at the first domain that matches and return true
+			if ($currentDomain != $this->selectedDomain &&  strpos($urlParts['host'], $currentDomain)) {
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+
+	/**
 	 * This method checks whether the given file is in the paths to track
 	 *
 	 * @param string $file Filename (with directories from site root) which is linked
@@ -419,13 +443,20 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 			// Make sure the domain configuration has been handled
 		$this->makeDomainConfiguration();
 
+		$url = $params['finalTagParts']['url'];
 		$function = FALSE;
 		switch ($params['finalTagParts']['TYPE']) {
 			case 'page':
-				// do nothing on normal links
+					// If cross-domain linking is activated, check if the link is indeed cross-domain
+					// Otherwise, nothing special needs to be done
+				if (!empty($this->selectedDomain)) {
+						// If typolink URL is cross-domain, add GA link code
+					if ($this->isUrlCrossDomain($url)) {
+						$function = 'RsGoogleAnalytics.crossDomainLink(this); return false;';
+					}
+				}
 				break;
 			case 'url' :
-				$url = $params['finalTagParts']['url'];
 				if ( /*checkInMultiple($url)*/
 					0) {
 					$function = $this->buildCommand('link', array($url)) . 'return false;';
@@ -435,12 +466,11 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 				break;
 			case 'file':
 				if ($this->modConfig['trackDownloads']) {
-					$fileName = $params['finalTagParts']['url'];
-					$fileInfo = pathinfo($fileName);
+					$fileInfo = pathinfo($url);
 					// TODO: provide hook where downloader extension can register their transformation function
 
-					if ($this->modConfig['trackDownloads'] == '!ALL' || $this->checkFile($fileName)) {
-						$function = $this->buildCommand('trackEvent', array('Download', $fileInfo['extension'], $fileName));
+					if ($this->modConfig['trackDownloads'] == '!ALL' || $this->checkFile($url)) {
+						$function = $this->buildCommand('trackEvent', array('Download', $fileInfo['extension'], $url));
 					}
 				}
 				break;
