@@ -436,7 +436,7 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 	 * @param tslib_cObj $reference Back-reference to the calling object
 	 * @return void
 	 */
-	function linkPostProcess(&$params, $reference) {
+	public function linkPostProcess(&$params, $reference) {
 		if (!$this->isActive()) {
 			return;
 		}
