@@ -1,3 +1,7 @@
+2012-12-10 Francois Suter  <typo3@cobweb.ch>
+
+	* Added hook for custom processing of page title, changed some method visibilites to provide a clear API, resolves #43615
+
 2012-12-03 Francois Suter  <typo3@cobweb.ch>
 
 	* Added code for properly tracking cross-domain links, resolves #43568

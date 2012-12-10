@@ -77,6 +77,30 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 	}
 
 	/**
+	 * Returns the extension's TypoScript configuration
+	 *
+	 * @return array
+	 */
+	public function getModConfig() {
+		return $this->modConfig;
+	}
+
+	/**
+	 * Adds a GA command to the command list
+	 *
+	 * @param string $command The GA command
+	 * @param int $key The key at which to add the command in the commands array (at the end if empty)
+	 */
+	public function addCommand($command, $key = 0) {
+		$key = intval($key);
+		if (empty($key)) {
+			array_push($this->commands, $command);
+		} else {
+			$this->commands[$key] = $command;
+		}
+	}
+
+	/**
 	 * Adds the tracking code at the end of the body tag (pi Method called from TS USER_INT). further the method
 	 * Adds some js code for downloads and external links if configured.
 	 *
@@ -104,6 +128,14 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 			}
 		} else {
 			$pageName = NULL;
+		}
+
+			// Hook for special treatment of the page name
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rsgoogleanalytics']['processPageName'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['rsgoogleanalytics']['processPageName'] as $className) {
+				$processor = &t3lib_div::getUserObj($className);
+				$pageName = $processor->processPageName($pageName, $this);
+			}
 		}
 		return $this->buildTrackingCode($pageName);
 	}
@@ -294,7 +326,7 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 	 * @param array $parameter The list of call parameters
 	 * @return string The assembled JavaScript command
 	 */
-	protected function buildCommand($command, array $parameter) {
+	public function buildCommand($command, array $parameter) {
 			// Generate traditional code
 		if (empty($this->modConfig['asynchronous'])) {
 			$command = "\t" . $this->trackerVar . '._' . $command . '(' . implode(', ', $this->wrapJSParams($parameter)) . ');';
@@ -320,7 +352,7 @@ class tx_rsgoogleanalytics implements t3lib_singleton {
 	 * @param array $parameter The list of call parameters
 	 * @return string The assembled JavaScript command
 	 */
-	protected function buildGatCommand($command, array $parameter) {
+	public function buildGatCommand($command, array $parameter) {
 			// Generate traditional code
 		if (empty($this->modConfig['asynchronous'])) {
 			$command = "\t" . '_gat._' . $command . '(' . implode(', ', $this->wrapJSParams($parameter)) . ');';
