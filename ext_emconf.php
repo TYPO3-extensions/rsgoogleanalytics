@@ -1,21 +1,21 @@
 <?php
 
-########################################################################
-# Extension Manager/Repository config file for ext "rsgoogleanalytics".
-#
-# Auto generated 25-01-2013 12:13
-#
-# Manual updates:
-# Only the data in the array - everything else is removed by next
-# writing. "version" and "dependencies" must not be touched!
-########################################################################
+/***************************************************************
+ * Extension Manager/Repository config file for ext "rsgoogleanalytics".
+ *
+ * Auto generated 04-07-2013 10:41
+ *
+ * Manual updates:
+ * Only the data in the array - everything else is removed by next
+ * writing. "version" and "dependencies" must not be touched!
+ ***************************************************************/
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Google Analytics',
 	'description' => 'Supports full options of Google Analytics with new ga.js (within Domains, FilesLinks, External URLs e.g.)',
 	'category' => 'RS WebSystems',
 	'shy' => 0,
-	'version' => '3.1.0',
+	'version' => '3.1.1',
 	'dependencies' => '',
 	'conflicts' => '',
 	'priority' => '',
